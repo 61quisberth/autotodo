@@ -2,6 +2,9 @@
 __pycache__/
 *.py[cod]
 
+# Implementation testing directory
+test/
+
 # C extensions
 *.so
 
