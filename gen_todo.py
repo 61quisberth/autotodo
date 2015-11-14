@@ -41,6 +41,7 @@ class Grepper:
         file_tup.append((root + "/" + file))
     return file_tup
 
+  # alt to grpe_file, using regex
   def regex_tester():
     r = re.compile('^[0-9]*$')
     string_list = ['123', 'a', '467','a2_2','322','21']
@@ -49,14 +50,13 @@ class Grepper:
 
 # main 
 g0 = Grepper()
-
-# test grep impl
-#filename = "/Users/jason_quisberth/work/autotodo/test/src/hello.cc"
-filename = "./test/src/hello.cc"
 pat = "TODO:"
-print g0.grep_file(filename, pat)
+fo = open("TODO", "wb")
 
-print ""
+for file_mat in g0.walk_print("."): 
+  if ( g0.grep_file(file_mat, pat) ):
+    fo.write( g0.grep_file(file_mat, pat)  + '\n')
 
-# test tree impl
-print g0.walk_print(".")
+print "TODO file generated via Autotodo"
+
+fo.close()
