@@ -11,7 +11,7 @@ import re
 import sys
 
 # single file grepping class
-class grepper:
+class Grepper:
   def __init__(self):
     self.matches = {}
     self.is_empty = True
@@ -24,19 +24,22 @@ class grepper:
     fo.close()
 
   # pseudo grep method
-  def grep_file(filename, pattern):
+  def grep_file(self, filename, pattern):
     file = open(filename, "r")
     line_cnt = 0
     for line in file:
       line_cnt = line_cnt+1
       if re.search(pattern, line):
-        return str(line_cnt) + ':' + line.strip('\n')
+        return filename + ":" + str(line_cnt) + ':' + line.strip('\n')
 
-  # psuedo tree method
-  def print_walk(dir_in):
-    # os.walk uses a tuple of root-dirs-files
-    for root, dirs, files in os.walk(dir_in):
-      return files #dictionary of files
+  # traverse root directory, and list directories as dirs and files as files
+  def walk_print(self, dir_in):
+    file_tup = [];
+    for root, dirs, files in os.walk("./test"):
+      path = root.split('/')
+      for file in files:
+        file_tup.append((root + "/" + file))
+    return file_tup
 
   def regex_tester():
     r = re.compile('^[0-9]*$')
@@ -45,5 +48,15 @@ class grepper:
 
 
 # main 
-g0 = grepper()
-print g0.is_empty
+g0 = Grepper()
+
+# test grep impl
+#filename = "/Users/jason_quisberth/work/autotodo/test/src/hello.cc"
+filename = "./test/src/hello.cc"
+pat = "TODO:"
+print g0.grep_file(filename, pat)
+
+print ""
+
+# test tree impl
+print g0.walk_print(".")
