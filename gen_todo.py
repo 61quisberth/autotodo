@@ -7,8 +7,8 @@
 
 import os
 import os.path
-import re
 import sys
+import re
 
 # single file grepping class
 class Grepper:
@@ -16,18 +16,11 @@ class Grepper:
     self.matches = {}
     self.is_empty = True
 
-
-  # dummy method writing todo file
-  def write_to_todo():
-    fo = open("TODO", "wb")
-    fo.write( "TODO: implement logic to auto-populate this file\n");
-    fo.close()
-
   # pseudo grep method
   def grep_file(self, filename, pattern):
-    file = open(filename, "r")
+    fid = open(filename, "r")
     line_cnt = 0
-    for line in file:
+    for line in fid:
       line_cnt = line_cnt+1
       if re.search(pattern, line):
         return filename + ":" + str(line_cnt) + ':' + line.strip('\n')
@@ -35,28 +28,37 @@ class Grepper:
   # traverse root directory, and list directories as dirs and files as files
   def walk_print(self, dir_in):
     file_tup = [];
-    for root, dirs, files in os.walk("./test"):
+    for root, dirs, files in os.walk(dir_in):
       path = root.split('/')
       for file in files:
         file_tup.append((root + "/" + file))
     return file_tup
 
-  # alt to grpe_file, using regex
+  # alt to grep_file, ex using regex
   def regex_tester():
     r = re.compile('^[0-9]*$')
     string_list = ['123', 'a', '467','a2_2','322','21']
     return filter(r.match, string_list)
 
+  # writing todo file
+  def populate_todo(self, base_dir):
+    pat = "TODO:"
+    fo = open("TODO", "wb")
+    for file_mat in self.walk_print(base_dir): 
+      if ( self.grep_file(file_mat, pat) ):
+        fo.write( self.grep_file(file_mat, pat)  + '\n')
+    fo.close()
+
 
 # main 
-g0 = Grepper()
-pat = "TODO:"
-fo = open("TODO", "wb")
 
-for file_mat in g0.walk_print("."): 
-  if ( g0.grep_file(file_mat, pat) ):
-    fo.write( g0.grep_file(file_mat, pat)  + '\n')
+if (len(sys.argv) != 2):
+  print "usage: " + sys.argv[0] + " <search_dir_name>" 
+  print 'Argument List:', str(sys.argv)
+  sys.exit(2)
+
+g0 = Grepper()
+
+g0.populate_todo(sys.argv[1])
 
 print "TODO file generated via Autotodo"
-
-fo.close()
