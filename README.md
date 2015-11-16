@@ -23,7 +23,9 @@ No installation required, just clone the repo for the script
 
 ### Usage
 `python gen_todo.py <base_dir>`
+
 `cat TODO`
+
 `path_to_file_hit:line_numer: [source code line containing inline comment]`
 
 
